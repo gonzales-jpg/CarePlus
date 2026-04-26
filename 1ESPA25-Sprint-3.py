@@ -143,9 +143,19 @@ def login()->None:
             continue
         else:
             print('Login realizado com sucesso!')
+
+            #pergunta para as missões
+            missoes_contextuais()
+
             #adiciona no arquivo
-            with open('users.txt', 'a') as u:
-                u.write(";".join([str(numeroCarteirinha), nome, senha]) + "\n")
+            with open('users.txt', 'a',encoding='utf-8')  as u:
+                u.write(";".join([
+                    str(numeroCarteirinha),
+                    nome,
+                    senha,
+                    ",".join(map(str, respostas))
+                ]) + "\n")
+            print(respostas)
             break
 def entrar() -> bool:
     print('Para acessar sua conta digite:')
@@ -198,9 +208,10 @@ def perguntar_numerico(pergunta):
             return valor
         except ValueError:
             print("Digite um número válido!")
+#declarando fora de qualquer função para ser global
+respostas:list = []
 
-
-def missoes_contextuais():
+def missoes_contextuais() ->list:
     print('Agora responda algumas perguntas para melhorarmos sua experiência')
 
     perguntas = [
@@ -216,13 +227,12 @@ def missoes_contextuais():
         'Quantas refeições você faz por dia? '
     ]
 
-    respostas = []
+
 
     for p in perguntas:
         respostas.append(perguntar_numerico(p))
+    return respostas
 
-    print(respostas)
-''''boas_vindas()
+boas_vindas()
 aceitar_lgpd()
-pedir_login()'''
-missoes_contextuais()
+pedir_login()

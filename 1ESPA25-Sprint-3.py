@@ -347,7 +347,7 @@ def definir_missoes(id_usuario) -> list:
             break  # para o loop depois de achar
     return missoes
 
-def menu(missoes_escolhidas):
+def menu(missoes_escolhidas,contador):
     while True:
         print("\n" + "=" * 40)
         print("        CARE PLUS - MENU")
@@ -355,7 +355,7 @@ def menu(missoes_escolhidas):
         print("1 - Missões Ativas")
         print("2 - Benefícios")
         print("3 - Mind+")
-        print("4 - Scan Diário")
+        print("4 - Seu Streak")
         print("5 - Conect+")
         print("6 - Notícias")
         print("7 - Meu Perfil")
@@ -367,7 +367,7 @@ def menu(missoes_escolhidas):
         match escolha:
             case "1":
                 print("\nMissões ativas\n")
-                mostrar_missoes(missoes_escolhidas)
+                contador = mostrar_missoes(missoes_escolhidas, contador)
 
             case "2":
                 print("\nAcessando Benefícios...\n")
@@ -376,7 +376,8 @@ def menu(missoes_escolhidas):
                 print("\nAcessando Mind+...\n")
 
             case "4":
-                print("\nAcessando Scan Diário...\n")
+                print("\nAcessando Seu Streak...\n")
+                atualizar_streak(contador)
 
             case "5":
                 print("\nAcessando Conect+...\n")
@@ -406,8 +407,9 @@ def gerar_missoes(missoes):
 
     return missoes_escolhidas
 
+contador = 0
+def mostrar_missoes(missoes_escolhidas,contador):
 
-def mostrar_missoes(missoes_escolhidas):
     print("\n" + "=" * 40)
     print("        MISSÕES ATIVAS")
     print("=" * 40)
@@ -421,20 +423,38 @@ def mostrar_missoes(missoes_escolhidas):
         escolha = int(input('Digite o número da missão que você realizou (0 para nenhuma): '))
     except ValueError:
         print("Entrada inválida!")
-        return
+        return contador
 
     if escolha == 0:
-        return
+        return contador
 
     if 1 <= escolha <= len(missoes_escolhidas):
         removida = missoes_escolhidas.pop(escolha - 1)
         print(f"Missão concluída: {removida}")
+        contador += 1
     else:
         print("Número inválido!")
+    return contador
+
+def atualizar_streak(contador):
+    streak = 0
+    print("\n" + "=" * 40)
+    print("    STREAK ATUAL")
+    print("=" * 40)
+
+    aumento = contador // 3
+
+    if aumento > 0:
+        streak += aumento
+        print(f"Seu streak agora é de {streak} dias!")
+    else:
+        print(f"Você ainda não completou missões suficientes. ({contador}/3)")
+
+    return streak
 
 boas_vindas()
 aceitar_lgpd()
 pedir_login()
 missoes = definir_missoes(id_usuario)
 missoes_escolhidas = gerar_missoes(missoes)
-menu(missoes_escolhidas)
+menu(missoes_escolhidas,contador)

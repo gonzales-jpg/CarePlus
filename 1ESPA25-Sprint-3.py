@@ -76,10 +76,11 @@ def aceitar_lgpd()->None:
                 print("Escolha uma opção váida!")
                 print()
                 continue
-
+id_usuario = None
 def pedir_login()->None:
     '''Essa função tem como objetivo perguntar se o usuário ja é registrado ou deseja fazer login'''
     print('Bem vindo a página de login da Care Plus')
+    global id_usuario
     while True:
         escolha:str = input("Caso seja sua primeira vez digite 'login', caso ja tenha conta, digite 'entrar':").lower()
         match escolha:
@@ -87,8 +88,9 @@ def pedir_login()->None:
                 login()
                 break
             case "entrar":
-                entrar()
+                id_usuario = entrar()
                 break
+
             case _:
                 print('Digite uma opção válida!')
                 continue
@@ -99,7 +101,6 @@ def login()->None:
     print()
     print('Login da Care Plus')
     confirmarSenha:str=''
-    users = {}
     while True:
         try:
             nome:str = input('Digite seu nome: ')
@@ -136,7 +137,8 @@ def login()->None:
         except ValueError:
             print('Erro inesperado!')
         break
-
+    global id_usuario  # Mantem uma variavél global
+    id_usuario = numeroCarteirinha
     while True:
         if senha != confirmarSenha:
             print('As senhas precisam ser identicas!')
@@ -146,7 +148,7 @@ def login()->None:
             print('Login realizado com sucesso!')
 
             #pergunta para as missões
-            missoes_contextuais()
+            respostas = missoes_contextuais()
 
             #adiciona no arquivo
             with open('users.txt', 'a',encoding='utf-8')  as u:
@@ -191,12 +193,11 @@ def entrar() -> bool:
                 if linha.strip() == "":
                     continue
 
-                id_, nome, senha_salva = linha.strip().split(";")
+                id_, nome, senha_salva, streak, respostas = linha.strip().split(";")
 
                 if numeroCarteirinha == int(id_) and senha == senha_salva:
                     print(f"Bem-vindo, {nome}!")
-                    return True
-
+                    return int(id_)
         # se não encontrou
         print("Carteirinha ou senha incorretos!")
 
@@ -205,7 +206,7 @@ def entrar() -> bool:
         if opcao == "criar":
             login()
             return False
-    return id_
+    return None
 
 def perguntar_numerico(pergunta):
     while True:
@@ -214,12 +215,10 @@ def perguntar_numerico(pergunta):
             return valor
         except ValueError:
             print("Digite um número válido!")
-#declarando fora de qualquer função para ser global
-respostas:list = []
 
 def missoes_contextuais() ->list:
     print('Agora responda algumas perguntas para melhorarmos sua experiência')
-
+    respostas:list = []
     perguntas = [
         'Quantos dias por semana você pratica atividade física? ',
         'Quantos minutos você passa sentado por dia? ',

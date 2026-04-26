@@ -347,7 +347,7 @@ def definir_missoes(id_usuario) -> list:
             break  # para o loop depois de achar
     return missoes
 
-def menu():
+def menu(missoes_escolhidas):
     while True:
         print("\n" + "=" * 40)
         print("        CARE PLUS - MENU")
@@ -367,7 +367,7 @@ def menu():
         match escolha:
             case "1":
                 print("\nMissões ativas\n")
-                mostrar_missoes(missoes)
+                mostrar_missoes(missoes_escolhidas)
 
             case "2":
                 print("\nAcessando Benefícios...\n")
@@ -394,22 +394,47 @@ def menu():
             case _:
                 print("\n Opção inválida! Tente novamente.\n")
 
-def mostrar_missoes(missoes):
+def gerar_missoes(missoes):
     import random
 
-    missoes_escolhidas = random.sample(missoes, 3) #sample pega randomizado sem repetir nenhum número
+    missoes_escolhidas = random.sample(missoes, min(2, len(missoes)))
 
+    with open('missoesgenericas.txt', 'r') as m:
+        missoes_genericas = [linha.strip() for linha in m.readlines()]
+
+    missoes_escolhidas += random.sample(missoes_genericas, 1)
+
+    return missoes_escolhidas
+
+
+def mostrar_missoes(missoes_escolhidas):
     print("\n" + "=" * 40)
     print("        MISSÕES ATIVAS")
     print("=" * 40)
 
-    for i, m in enumerate(missoes_escolhidas, 1):
+    for i, m in enumerate(missoes_escolhidas, 1): #enumerate pega o indice e o valor de uma lista
         print(f"{i} - {m}")
 
     print("=" * 40)
+
+    try:
+        escolha = int(input('Digite o número da missão que você realizou (0 para nenhuma): '))
+    except ValueError:
+        print("Entrada inválida!")
+        return
+
+    if escolha == 0:
+        return
+
+    if 1 <= escolha <= len(missoes_escolhidas):
+        removida = missoes_escolhidas.pop(escolha - 1)
+        print(f"Missão concluída: {removida}")
+    else:
+        print("Número inválido!")
 
 boas_vindas()
 aceitar_lgpd()
 pedir_login()
 missoes = definir_missoes(id_usuario)
-menu()
+missoes_escolhidas = gerar_missoes(missoes)
+menu(missoes_escolhidas)

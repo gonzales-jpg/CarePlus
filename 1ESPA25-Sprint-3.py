@@ -238,7 +238,7 @@ def missoes_contextuais() ->list:
         respostas.append(perguntar_numerico(p))
     return respostas
 
-def definir_missoes(id_usuario) -> None:
+def definir_missoes(id_usuario) -> list:
     with open("users.txt", "r", encoding="utf-8", errors='ignore') as f:
         for linha in f:
             if linha.strip() == "":
@@ -247,19 +247,105 @@ def definir_missoes(id_usuario) -> None:
             id_, nome, senha, streak, respostas_str = linha.strip().split(";")
 
             if int(id_) != id_usuario:
-                continue  # ignora outros usuários
+                continue
 
-            # achou o usuário certo
-            id_ = int(id_)
-            streak = int(streak)
             respostas = list(map(float, respostas_str.split(",")))
 
-            print("ID:", id_)
-            print("Nome:", nome)
-            print("Streak:", streak)
-            print("Respostas:", respostas)
+            dias_atividade = respostas[0]
+            tempo_sentado = respostas[1]
+            distancia = respostas[2]
+            agua = respostas[3]
+            sono = respostas[4]
+            celular = respostas[5]
+            pausas = respostas[6]
+            cafeina = respostas[7]
+            ar_livre = respostas[8]
+            refeicoes = respostas[9]
+
+            missoes = []
+
+            # atividade física
+            if dias_atividade == 0:
+                missoes.append("Comece com 1 dia de atividade física essa semana")
+            elif dias_atividade <= 2:
+                missoes.append("Aumente para 3 dias de atividade física")
+            else:
+                missoes.append("Mantenha sua rotina ativa e faça 1 atividade hoje")
+
+            # tempo sentado
+            if tempo_sentado > 600:
+                missoes.append("Levante-se e caminhe por 5 minutos agora")
+            elif tempo_sentado > 300:
+                missoes.append("Faça uma pausa para alongamento")
+            else:
+                missoes.append("Ótimo! Continue se movimentando ao longo do dia")
+
+            # distância
+            if distancia < 1:
+                missoes.append("Caminhe pelo menos 1 km hoje")
+            elif distancia < 3:
+                missoes.append("Tente aumentar sua caminhada para 3 km")
+            else:
+                missoes.append("Excelente! Continue com seu nível de movimento")
+
+            # água
+            if agua < 1:
+                missoes.append("Beba pelo menos 1 litro de água hoje")
+            elif agua < 2:
+                missoes.append("Tente atingir 2 litros de água hoje")
+            else:
+                missoes.append("Ótimo! Continue se hidratando bem")
+
+            # sono
+            if sono < 5:
+                missoes.append("Durma pelo menos 6 horas hoje")
+            elif sono < 7:
+                missoes.append("Tente melhorar seu sono para 7-8 horas")
+            else:
+                missoes.append("Excelente! Continue com um bom descanso")
+
+            # celular
+            if celular > 8:
+                missoes.append("Reduza 1 hora de uso do celular hoje")
+            elif celular > 5:
+                missoes.append("Tente diminuir o tempo de tela")
+            else:
+                missoes.append("Ótimo controle de tempo de tela!")
+
+            # pausas
+            if pausas == 0:
+                missoes.append("Faça pelo menos 2 pausas hoje")
+            elif pausas < 3:
+                missoes.append("Aumente para 3 pausas ao longo do dia")
+            else:
+                missoes.append("Ótimo! Continue fazendo pausas regulares")
+
+            # cafeína
+            if cafeina > 5:
+                missoes.append("Reduza o consumo de cafeína hoje")
+            elif cafeina > 2:
+                missoes.append("Tente diminuir um pouco a cafeína")
+            else:
+                missoes.append("Bom controle no consumo de cafeína")
+
+            # ar livre
+            if ar_livre < 10:
+                missoes.append("Passe pelo menos 10 minutos ao ar livre hoje")
+            elif ar_livre < 30:
+                missoes.append("Tente ficar 30 minutos ao ar livre")
+            else:
+                missoes.append("Ótimo! Continue aproveitando o tempo externo")
+
+            # refeições
+            if refeicoes < 3:
+                missoes.append("Faça pelo menos 3 refeições hoje")
+            elif refeicoes <= 4:
+                missoes.append("Tente manter uma alimentação equilibrada")
+            else:
+                missoes.append("Cuidado com excessos, mantenha equilíbrio")
 
             break  # para o loop depois de achar
+    return missoes
 
 def menu():
     while True:
@@ -280,7 +366,8 @@ def menu():
 
         match escolha:
             case "1":
-                print("\nAcessando Missões Ativas...\n")
+                print("\nMissões ativas\n")
+                mostrar_missoes(missoes)
 
             case "2":
                 print("\nAcessando Benefícios...\n")
@@ -307,8 +394,22 @@ def menu():
             case _:
                 print("\n Opção inválida! Tente novamente.\n")
 
+def mostrar_missoes(missoes):
+    import random
+
+    missoes_escolhidas = random.sample(missoes, 3) #sample pega randomizado sem repetir nenhum número
+
+    print("\n" + "=" * 40)
+    print("        MISSÕES ATIVAS")
+    print("=" * 40)
+
+    for i, m in enumerate(missoes_escolhidas, 1):
+        print(f"{i} - {m}")
+
+    print("=" * 40)
+
 boas_vindas()
 aceitar_lgpd()
 pedir_login()
-definir_missoes(id_usuario)
-#menu()
+missoes = definir_missoes(id_usuario)
+menu()

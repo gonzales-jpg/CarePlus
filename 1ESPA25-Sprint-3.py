@@ -147,7 +147,6 @@ def login()->None:
             with open('users.txt', 'a') as u:
                 u.write(";".join([str(numeroCarteirinha), nome, senha]) + "\n")
             break
-
 def entrar() -> bool:
     print('Para acessar sua conta digite:')
 
@@ -192,11 +191,38 @@ def entrar() -> bool:
             login()
             return False
 
+def perguntar_numerico(pergunta):
+    while True:
+        try:
+            valor = float(input(pergunta))
+            return valor
+        except ValueError:
+            print("Digite um número válido!")
 
 
+def missoes_contextuais():
+    print('Agora responda algumas perguntas para melhorarmos sua experiência')
 
+    perguntas = [
+        'Quantos dias por semana você pratica atividade física? ',
+        'Quantos minutos você passa sentado por dia? ',
+        'Qual a distância média que você percorre por dia (em km)? ',
+        'Quantos litros de água você bebe por dia? ',
+        'Quantas horas você dorme por noite? ',
+        'Quantas horas por dia você passa no celular? ',
+        'Quantas pausas você faz durante o dia? ',
+        'Quantos copos de cafeína você consome por dia? ',
+        'Quantos minutos por dia você passa ao ar livre? ',
+        'Quantas refeições você faz por dia? '
+    ]
 
-boas_vindas()
+    respostas = []
+
+    for p in perguntas:
+        respostas.append(perguntar_numerico(p))
+
+    print(respostas)
+''''boas_vindas()
 aceitar_lgpd()
-pedir_login()
-
+pedir_login()'''
+missoes_contextuais()

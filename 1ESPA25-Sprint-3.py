@@ -347,7 +347,7 @@ def definir_missoes(id_usuario) -> list:
             break  # para o loop depois de achar
     return missoes
 
-def menu(missoes_escolhidas,contador):
+def menu(missoes_escolhidas,contador,id_usuario):
     while True:
         print("\n" + "=" * 40)
         print("        CARE PLUS - MENU")
@@ -377,7 +377,7 @@ def menu(missoes_escolhidas,contador):
 
             case "4":
                 print("\nAcessando Seu Streak...\n")
-                atualizar_streak(contador)
+                atualizar_streak_arquivo(id_usuario,contador)
 
             case "5":
                 print("\nAcessando Conect+...\n")
@@ -436,25 +436,38 @@ def mostrar_missoes(missoes_escolhidas,contador):
         print("Número inválido!")
     return contador
 
-def atualizar_streak(contador):
-    streak = 0
-    print("\n" + "=" * 40)
-    print("    STREAK ATUAL")
-    print("=" * 40)
+def atualizar_streak_arquivo(id_usuario, contador):
+    if contador < 3:
+        print("Você ainda não completou 3 missões.")
+        return
 
-    aumento = contador // 3
+    linhas = []
 
-    if aumento > 0:
-        streak += aumento
-        print(f"Seu streak agora é de {streak} dias!")
-    else:
-        print(f"Você ainda não completou missões suficientes. ({contador}/3)")
+    with open("users.txt", "r", encoding="utf-8") as f:
+        for linha in f:
+            if linha.strip() == "":
+                continue
 
-    return streak
+            partes = linha.strip().split(";")
+
+            id_, nome, senha, streak, respostas = partes
+
+            if int(id_) == id_usuario:
+                streak = str(int(streak) + 1)
+                print(f"Streak atualizado! Novo streak: {streak}")
+
+            nova_linha = ";".join([id_, nome, senha, streak, respostas])
+            linhas.append(nova_linha)
+
+    # reescreve o arquivo inteiro
+    with open("users.txt", "w", encoding="utf-8") as f:
+        for l in linhas:
+            f.write(l + "\n")
+
 
 boas_vindas()
 aceitar_lgpd()
 pedir_login()
 missoes = definir_missoes(id_usuario)
 missoes_escolhidas = gerar_missoes(missoes)
-menu(missoes_escolhidas,contador)
+menu(missoes_escolhidas,contador,id_usuario)

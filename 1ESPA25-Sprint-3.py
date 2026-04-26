@@ -95,6 +95,7 @@ def pedir_login()->None:
 
 def login()->None:
     '''Essa função tem como objetivo realizar o login do usuário'''
+    streak = '0'
     print()
     print('Login da Care Plus')
     confirmarSenha:str=''
@@ -153,9 +154,13 @@ def login()->None:
                     str(numeroCarteirinha),
                     nome,
                     senha,
+                    streak,
                     ",".join(map(str, respostas))
                 ]) + "\n")
-            print(respostas)
+
+            #Estrutura dentro do arquivo
+            #[id];[nome];[senha];[streak];[respostas]
+
             break
 def entrar() -> bool:
     print('Para acessar sua conta digite:')
@@ -200,6 +205,7 @@ def entrar() -> bool:
         if opcao == "criar":
             login()
             return False
+    return id_
 
 def perguntar_numerico(pergunta):
     while True:
@@ -233,6 +239,77 @@ def missoes_contextuais() ->list:
         respostas.append(perguntar_numerico(p))
     return respostas
 
+def definir_missoes(id_usuario) -> None:
+    with open("users.txt", "r", encoding="utf-8", errors='ignore') as f:
+        for linha in f:
+            if linha.strip() == "":
+                continue
+
+            id_, nome, senha, streak, respostas_str = linha.strip().split(";")
+
+            if int(id_) != id_usuario:
+                continue  # ignora outros usuários
+
+            # achou o usuário certo
+            id_ = int(id_)
+            streak = int(streak)
+            respostas = list(map(float, respostas_str.split(",")))
+
+            print("ID:", id_)
+            print("Nome:", nome)
+            print("Streak:", streak)
+            print("Respostas:", respostas)
+
+            break  # para o loop depois de achar
+
+def menu():
+    while True:
+        print("\n" + "=" * 40)
+        print("        CARE PLUS - MENU")
+        print("=" * 40)
+        print("1 - Missões Ativas")
+        print("2 - Benefícios")
+        print("3 - Mind+")
+        print("4 - Scan Diário")
+        print("5 - Conect+")
+        print("6 - Notícias")
+        print("7 - Meu Perfil")
+        print("0 - Sair")
+        print("=" * 40)
+
+        escolha = input("Escolha uma opção: ")
+
+        match escolha:
+            case "1":
+                print("\nAcessando Missões Ativas...\n")
+
+            case "2":
+                print("\nAcessando Benefícios...\n")
+
+            case "3":
+                print("\nAcessando Mind+...\n")
+
+            case "4":
+                print("\nAcessando Scan Diário...\n")
+
+            case "5":
+                print("\nAcessando Conect+...\n")
+
+            case "6":
+                print("\nAcessando Notícias...\n")
+
+            case "7":
+                print("\nAcessando Meu Perfil...\n")
+
+            case "0":
+                print("\nEncerrando... Até mais!")
+                break
+
+            case _:
+                print("\n Opção inválida! Tente novamente.\n")
+
 boas_vindas()
 aceitar_lgpd()
 pedir_login()
+definir_missoes(id_usuario)
+#menu()

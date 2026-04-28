@@ -381,9 +381,11 @@ def menu(missoes_escolhidas,contador,id_usuario):
 
             case "5":
                 print("\nAcessando Conect+...\n")
+                connect_plus()
 
             case "6":
                 print("\nAcessando Notícias...\n")
+                noticias()
 
             case "7":
                 print("\nAcessando Meu Perfil...\n")
@@ -538,9 +540,49 @@ def mind_plus():
 
             case _:
                 print('Digite um número válido')
+
+def connect_plus():
+    '''Essa função tem como objetivo mostrar o menu da conectividade do sistema com relogios inteligentes'''
+    print("\n" + "=" * 40)
+    print("          CONNECT+")
+    print("=" * 40)
+    print("Integre seu dispositivo inteligente")
+    print("e acompanhe seus dados em tempo real.")
+    print("-" * 40)
+    print("Dispositivos compatíveis:")
+    print("- Smartwatch")
+    print("- Pulseiras fitness")
+    print("- Aplicativos de saúde")
+    print("-" * 40)
+    print("Sincronize passos, batimentos, sono")
+    print("e outras informações automaticamente.")
+    print("=" * 40)
+
+def noticias():
+    '''Essa função tem como objetivo de mostrar as noticias'''
+    print("\n" + "=" * 40)
+    print("            NOTÍCIAS")
+    print("=" * 40)
+
+    print("1. Saúde mental ganha destaque em 2026")
+    print("Cresce a busca por apoio psicológico e bem-estar emocional.")
+    print("-" * 40)
+
+    print("2. Uso de smartwatches aumenta no Brasil")
+    print("Dispositivos ajudam no monitoramento de saúde diária.")
+    print("-" * 40)
+
+    print("3. Pequenos hábitos melhoram qualidade de vida")
+    print("Especialistas reforçam a importância de rotina saudável.")
+    print("-" * 40)
+
+    print("Fique atento às novidades e cuide da sua saúde.")
+    print("=" * 40)
+
 boas_vindas()
 aceitar_lgpd()
 pedir_login()
 missoes = definir_missoes(id_usuario)
 missoes_escolhidas = gerar_missoes(missoes)
 menu(missoes_escolhidas,contador,id_usuario)
+

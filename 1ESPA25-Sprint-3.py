@@ -366,7 +366,6 @@ def menu(missoes_escolhidas,contador,id_usuario):
 
         match escolha:
             case "1":
-                print("\nMissões ativas\n")
                 contador = mostrar_missoes(missoes_escolhidas, contador)
 
             case "2":
@@ -374,6 +373,7 @@ def menu(missoes_escolhidas,contador,id_usuario):
 
             case "3":
                 print("\nAcessando Mind+...\n")
+                mind_plus()
 
             case "4":
                 print("\nAcessando Seu Streak...\n")
@@ -464,7 +464,80 @@ def atualizar_streak_arquivo(id_usuario, contador):
         for l in linhas:
             f.write(l + "\n")
 
+def mind_plus():
+    print("\n" + "=" * 40)
+    print("           MIND+")
+    print("=" * 40)
+    print("Pedir ajuda não é sinal de fraqueza,")
+    print("é a coragem de escolher cuidar de si.")
+    print("=" * 40)
 
+    while True:
+        print()
+        print('1. Quando procurar um psicólogo?')
+        print('   Atento a sinais de alteração da saúde mental')
+        print()
+        print('2. Crise de ansiedade?')
+        print('   Técnica 5-4-3-2-1')
+        print()
+        print('3. Não está se sentindo bem?')
+        print('   Centro de Valorização da Vida')
+        print()
+        print('4. Reduzir tensão?')
+        print('   Método simples de relaxamento')
+        print()
+        print('5. Pronto atendimento')
+        print()
+        print('0. Voltar')
+
+        escolha = input('Digite o número da opção: ')
+
+        match escolha:
+            case "1":
+                print("\nQuando procurar um psicólogo:")
+                print("- Quando você sente tristeza constante ou desânimo")
+                print("- Dificuldade para lidar com emoções")
+                print("- Ansiedade frequente ou crises")
+                print("- Problemas de sono ou concentração")
+                print("- Sensação de estar sobrecarregado")
+                print("Procurar ajuda é um passo importante para o bem-estar.\n")
+
+            case "2":
+                print("\nTécnica 5-4-3-2-1 para ansiedade:")
+                print("Observe ao seu redor e identifique:")
+                print("5 coisas que você pode ver")
+                print("4 coisas que pode tocar")
+                print("3 coisas que pode ouvir")
+                print("2 coisas que pode cheirar")
+                print("1 coisa que pode saborear")
+                print("Isso ajuda a trazer sua atenção para o presente.\n")
+
+            case "3":
+                print("\nCentro de Valorização da Vida (CVV):")
+                print("Você pode ligar gratuitamente para o número 188")
+                print("Atendimento 24 horas por dia, todos os dias")
+                print("Também disponível via chat no site oficial")
+                print("Você não está sozinho.\n")
+
+            case "4":
+                print("\nMétodo de 2 minutos para reduzir tensão:")
+                print("1. Pare o que estiver fazendo")
+                print("2. Inspire profundamente pelo nariz por 4 segundos")
+                print("3. Segure o ar por 4 segundos")
+                print("4. Solte lentamente pela boca por 6 segundos")
+                print("5. Repita por 2 minutos")
+                print("Isso ajuda a desacelerar o corpo e a mente.\n")
+
+            case "5":
+                print("\nPronto atendimento:")
+                print("Sua solicitação foi registrada.")
+                print("Você será contatado em breve por um profissional.\n")
+
+            case "0":
+                break
+
+            case _:
+                print('Digite um número válido')
 boas_vindas()
 aceitar_lgpd()
 pedir_login()

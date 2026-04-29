@@ -98,6 +98,7 @@ def pedir_login()->None:
 def login()->None:
     '''Essa função tem como objetivo realizar o login do usuário'''
     streak = '0'
+    trofeus = '0'
     print()
     print('Login da Care Plus')
     confirmarSenha:str=''
@@ -157,11 +158,12 @@ def login()->None:
                     nome,
                     senha,
                     streak,
+                    trofeus,
                     ",".join(map(str, respostas))
                 ]) + "\n")
 
             #Estrutura dentro do arquivo
-            #[id];[nome];[senha];[streak];[respostas]
+            #[id];[nome];[senha];[streak];[trofeus],[respostas]
 
             break
 def entrar() -> bool:
@@ -193,7 +195,7 @@ def entrar() -> bool:
                 if linha.strip() == "":
                     continue
 
-                id_, nome, senha_salva, streak, respostas = linha.strip().split(";")
+                id_, nome, senha_salva, streak,trofeus, respostas = linha.strip().split(";")
 
                 if numeroCarteirinha == int(id_) and senha == senha_salva:
                     print(f"Bem-vindo, {nome}!")
@@ -244,7 +246,7 @@ def definir_missoes(id_usuario) -> list:
             if linha.strip() == "":
                 continue
 
-            id_, nome, senha, streak, respostas_str = linha.strip().split(";")
+            id_, nome, senha, streak,trofeus, respostas_str = linha.strip().split(";")
 
             if int(id_) != id_usuario:
                 continue
@@ -266,83 +268,83 @@ def definir_missoes(id_usuario) -> list:
 
             # atividade física
             if dias_atividade == 0:
-                missoes.append("Comece com 1 dia de atividade física essa semana")
+                missoes.append("Comece com 1 dia de atividade física essa semana | 50 troféus")
             elif dias_atividade <= 2:
-                missoes.append("Aumente para 3 dias de atividade física")
+                missoes.append("Aumente para 3 dias de atividade física | 40 troféus")
             else:
-                missoes.append("Mantenha sua rotina ativa e faça 1 atividade hoje")
+                missoes.append("Mantenha sua rotina ativa e faça 1 atividade hoje | 30 troféus")
 
             # tempo sentado
             if tempo_sentado > 600:
-                missoes.append("Levante-se e caminhe por 5 minutos agora")
+                missoes.append("Levante-se e caminhe por 5 minutos agora | 40 troféus")
             elif tempo_sentado > 300:
-                missoes.append("Faça uma pausa para alongamento")
+                missoes.append("Faça uma pausa para alongamento | 30 troféus")
             else:
-                missoes.append("Ótimo! Continue se movimentando ao longo do dia")
+                missoes.append("Ótimo! Continue se movimentando ao longo do dia | 20 troféus")
 
             # distância
             if distancia < 1:
-                missoes.append("Caminhe pelo menos 1 km hoje")
+                missoes.append("Caminhe pelo menos 1 km hoje | 40 troféus")
             elif distancia < 3:
-                missoes.append("Tente aumentar sua caminhada para 3 km")
+                missoes.append("Tente aumentar sua caminhada para 3 km | 30 troféus")
             else:
-                missoes.append("Excelente! Continue com seu nível de movimento")
+                missoes.append("Excelente! Continue com seu nível de movimento | 20 troféus")
 
             # água
             if agua < 1:
-                missoes.append("Beba pelo menos 1 litro de água hoje")
+                missoes.append("Beba pelo menos 1 litro de água hoje | 40 troféus")
             elif agua < 2:
-                missoes.append("Tente atingir 2 litros de água hoje")
+                missoes.append("Tente atingir 2 litros de água hoje | 30 troféus")
             else:
-                missoes.append("Ótimo! Continue se hidratando bem")
+                missoes.append("Ótimo! Continue se hidratando bem | 20 troféus")
 
             # sono
             if sono < 5:
-                missoes.append("Durma pelo menos 6 horas hoje")
+                missoes.append("Durma pelo menos 6 horas hoje | 50 troféus")
             elif sono < 7:
-                missoes.append("Tente melhorar seu sono para 7-8 horas")
+                missoes.append("Tente melhorar seu sono para 7-8 horas | 40 troféus")
             else:
-                missoes.append("Excelente! Continue com um bom descanso")
+                missoes.append("Excelente! Continue com um bom descanso | 20 troféus")
 
             # celular
             if celular > 8:
-                missoes.append("Reduza 1 hora de uso do celular hoje")
+                missoes.append("Reduza 1 hora de uso do celular hoje | 50 troféus")
             elif celular > 5:
-                missoes.append("Tente diminuir o tempo de tela")
+                missoes.append("Tente diminuir o tempo de tela | 40 troféus")
             else:
-                missoes.append("Ótimo controle de tempo de tela!")
+                missoes.append("Ótimo controle de tempo de tela! | 20 troféus")
 
             # pausas
             if pausas == 0:
-                missoes.append("Faça pelo menos 2 pausas hoje")
+                missoes.append("Faça pelo menos 2 pausas hoje | 40 troféus")
             elif pausas < 3:
-                missoes.append("Aumente para 3 pausas ao longo do dia")
+                missoes.append("Aumente para 3 pausas ao longo do dia | 30 troféus")
             else:
-                missoes.append("Ótimo! Continue fazendo pausas regulares")
+                missoes.append("Ótimo! Continue fazendo pausas regulares | 20 troféus")
 
             # cafeína
             if cafeina > 5:
-                missoes.append("Reduza o consumo de cafeína hoje")
+                missoes.append("Reduza o consumo de cafeína hoje | 40 troféus")
             elif cafeina > 2:
-                missoes.append("Tente diminuir um pouco a cafeína")
+                missoes.append("Tente diminuir um pouco a cafeína | 30 troféus")
             else:
-                missoes.append("Bom controle no consumo de cafeína")
+                missoes.append("Bom controle no consumo de cafeína | 20 troféus")
 
             # ar livre
             if ar_livre < 10:
-                missoes.append("Passe pelo menos 10 minutos ao ar livre hoje")
+                missoes.append("Passe pelo menos 10 minutos ao ar livre hoje | 40 troféus")
             elif ar_livre < 30:
-                missoes.append("Tente ficar 30 minutos ao ar livre")
+                missoes.append("Tente ficar 30 minutos ao ar livre | 30 troféus")
             else:
-                missoes.append("Ótimo! Continue aproveitando o tempo externo")
+                missoes.append("Ótimo! Continue aproveitando o tempo externo | 20 troféus")
 
             # refeições
             if refeicoes < 3:
-                missoes.append("Faça pelo menos 3 refeições hoje")
+                missoes.append("Faça pelo menos 3 refeições hoje | 40 troféus")
             elif refeicoes <= 4:
-                missoes.append("Tente manter uma alimentação equilibrada")
+                missoes.append("Tente manter uma alimentação equilibrada | 30 troféus")
             else:
-                missoes.append("Cuidado com excessos, mantenha equilíbrio")
+                missoes.append("Cuidado com excessos, mantenha equilíbrio | 20 troféus")
 
             break  # para o loop depois de achar
     return missoes
@@ -366,10 +368,11 @@ def menu(missoes_escolhidas,contador,id_usuario):
 
         match escolha:
             case "1":
-                contador = mostrar_missoes(missoes_escolhidas, contador)
+                contador = mostrar_missoes(missoes_escolhidas, contador, id_usuario)
 
             case "2":
                 print("\nAcessando Benefícios...\n")
+                trofeus_usuario = beneficios_menu(trofeus_usuario)
 
             case "3":
                 print("\nAcessando Mind+...\n")
@@ -410,13 +413,14 @@ def gerar_missoes(missoes):
     return missoes_escolhidas
 
 contador = 0
-def mostrar_missoes(missoes_escolhidas,contador):
+
+def mostrar_missoes(missoes_escolhidas, contador, id_usuario,trofeus_usuario):
 
     print("\n" + "=" * 40)
     print("        MISSÕES ATIVAS")
     print("=" * 40)
 
-    for i, m in enumerate(missoes_escolhidas, 1): #enumerate pega o indice e o valor de uma lista
+    for i, m in enumerate(missoes_escolhidas, 1):
         print(f"{i} - {m}")
 
     print("=" * 40)
@@ -432,10 +436,20 @@ def mostrar_missoes(missoes_escolhidas,contador):
 
     if 1 <= escolha <= len(missoes_escolhidas):
         removida = missoes_escolhidas.pop(escolha - 1)
+
+        # 👇 extrai troféus
+        trofeus_ganhos = int(removida.split("|")[1].split()[0])
+
         print(f"Missão concluída: {removida}")
+        print(f"Você ganhou {trofeus_ganhos} troféus!")
+
+        # 👇 atualiza arquivo
+        atualizar_trofeus_arquivo(id_usuario, trofeus_ganhos)
+
         contador += 1
     else:
         print("Número inválido!")
+
     return contador
 
 def atualizar_streak_arquivo(id_usuario, contador):
@@ -452,13 +466,13 @@ def atualizar_streak_arquivo(id_usuario, contador):
 
             partes = linha.strip().split(";")
 
-            id_, nome, senha, streak, respostas = partes
+            id_, nome, senha, streak,trofeus, respostas = partes
 
             if int(id_) == id_usuario:
                 streak = str(int(streak) + 1)
                 print(f"Streak atualizado! Novo streak: {streak}")
 
-            nova_linha = ";".join([id_, nome, senha, streak, respostas])
+            nova_linha = ";".join([id_, nome, senha, streak,trofeus, respostas])
             linhas.append(nova_linha)
 
     # reescreve o arquivo inteiro
@@ -579,6 +593,106 @@ def noticias():
     print("Fique atento às novidades e cuide da sua saúde.")
     print("=" * 40)
 
+def atualizar_trofeus_arquivo(id_usuario, trofeus_ganhos):
+    linhas = []
+
+    with open("users.txt", "r", encoding="utf-8") as f:
+        for linha in f:
+            if linha.strip() == "":
+                continue
+
+            id_, nome, senha, streak, trofeus, respostas = linha.strip().split(";")
+
+            if int(id_) == id_usuario:
+                novo_total = int(trofeus) + trofeus_ganhos
+                trofeus = str(novo_total)
+                print(f"Total de troféus agora: {trofeus}")
+
+            nova_linha = ";".join([id_, nome, senha, streak, trofeus, respostas])
+            linhas.append(nova_linha)
+
+    with open("users.txt", "w", encoding="utf-8") as f:
+        for l in linhas:
+            f.write(l + "\n")
+
+def beneficios_menu(trofeus_usuario):
+    beneficios = [
+        "Desconto de 20% em corridas da Uber | 300 troféus",
+        "1 mês grátis de Spotify Premium | 400 troféus",
+        "Barrinha de proteína da Growth Supplements | 150 troféus",
+        "Desconto de 30% em consulta na Dr. Consulta | 500 troféus",
+        "Cupom de R$20 no iFood | 350 troféus",
+        "Shake proteico da Max Titanium | 200 troféus",
+        "Desconto de 25% em academia Smart Fit | 600 troféus",
+        "Garrafa térmica esportiva | 250 troféus",
+        "Desconto de R$15 em corrida 99 | 300 troféus",
+        "Plano mensal da Headspace (meditação) | 450 troféus",
+        "Kit de snacks saudáveis (barra + nuts) | 300 troféus",
+        "Desconto de 20% na Decathlon | 400 troféus",
+        "Fone esportivo Bluetooth | 700 troféus",
+        "Voucher de R$30 em farmácia Drogasil | 500 troféus",
+        "Desconto de 25% em massagem relaxante | 600 troféus",
+        "Suplemento multivitamínico (1 mês) | 350 troféus",
+        "Desconto de 20% em nutricionista | 550 troféus",
+        "Camiseta esportiva dry-fit | 450 troféus",
+        "Voucher de R$25 na Amazon | 600 troféus",
+        "Plano básico do Gympass (1 semana) | 700 troféus"
+    ]
+
+    while True:
+        print("\n" + "=" * 40)
+        print("          BENEFÍCIOS")
+        print("=" * 40)
+        print(f"Seus troféus: {trofeus_usuario}")
+        print("-" * 40)
+
+        for i, b in enumerate(beneficios, 1):
+            print(f"{i} - {b}")
+
+        print("=" * 40)
+        print("0 - Voltar")
+
+        try:
+            escolha = int(input("Escolha um benefício para resgatar: "))
+        except ValueError:
+            print("Entrada inválida!")
+            continue
+
+        if escolha == 0:
+            break
+
+        if 1 <= escolha <= len(beneficios):
+            beneficio = beneficios[escolha - 1]
+
+            # extrai custo
+            custo = int(beneficio.split("|")[1].split()[0])
+
+            if trofeus_usuario >= custo:
+                trofeus_usuario -= custo
+                removido = beneficios.pop(escolha - 1)
+
+                print("\nBenefício resgatado com sucesso!")
+                print(removido)
+                print(f"Troféus restantes: {trofeus_usuario}")
+            else:
+                print("\nTroféus insuficientes!")
+        else:
+            print("Opção inválida!")
+
+    return trofeus_usuario
+
+def pegar_trofeus(id_usuario):
+    with open("users.txt", "r", encoding="utf-8") as f:
+        for linha in f:
+            if linha.strip() == "":
+                continue
+
+            id_, nome, senha, streak, trofeus, respostas = linha.strip().split(";")
+
+            if int(id_) == id_usuario:
+                return int(trofeus)
+
+    return 0
 boas_vindas()
 aceitar_lgpd()
 pedir_login()

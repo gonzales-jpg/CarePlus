@@ -166,6 +166,7 @@ def login()->None:
             #[id];[nome];[senha];[streak];[trofeus],[respostas]
 
             break
+
 def entrar() -> bool:
     print('Para acessar sua conta digite:')
 
@@ -189,7 +190,7 @@ def entrar() -> bool:
         # verifica no arquivo
         encontrado = False
 
-        with open("users.txt", "a+") as f:
+        with open("users.txt", "a+", encoding='utf-8') as f:
             f.seek(0)
             for linha in f:
                 if linha.strip() == "":
@@ -207,7 +208,13 @@ def entrar() -> bool:
 
         if opcao == "criar":
             login()
-            return False
+            return id_usuario
+
+        elif opcao == "":
+            continue  # tenta novamente
+
+        else:
+            print("Opção inválida! Digite apenas 'criar' ou pressione Enter.")
     return None
 
 def perguntar_numerico(pergunta):
@@ -241,6 +248,8 @@ def missoes_contextuais() ->list:
     return respostas
 
 def definir_missoes(id_usuario) -> list:
+    missoes = []
+
     with open("users.txt", "r", encoding="utf-8", errors='ignore') as f:
         for linha in f:
             if linha.strip() == "":
@@ -264,7 +273,6 @@ def definir_missoes(id_usuario) -> list:
             ar_livre = respostas[8]
             refeicoes = respostas[9]
 
-            missoes = []
 
             # atividade física
             if dias_atividade == 0:
@@ -348,8 +356,7 @@ def definir_missoes(id_usuario) -> list:
 
             break  # para o loop depois de achar
     return missoes
-
-def menu(missoes_escolhidas,contador,id_usuario):
+def menu(missoes_escolhidas,contador,id_usuario,trofeus_usuario):
     while True:
         print("\n" + "=" * 40)
         print("        CARE PLUS - MENU")
@@ -368,7 +375,13 @@ def menu(missoes_escolhidas,contador,id_usuario):
 
         match escolha:
             case "1":
-                contador = mostrar_missoes(missoes_escolhidas, contador, id_usuario)
+                contador, trofeus_usuario, missoes_escolhidas = mostrar_missoes(
+                    missoes_escolhidas,
+                    contador,
+                    id_usuario,
+                    trofeus_usuario,
+                    missoes
+                )
 
             case "2":
                 print("\nAcessando Benefícios...\n")
@@ -392,7 +405,7 @@ def menu(missoes_escolhidas,contador,id_usuario):
 
             case "7":
                 print("\nAcessando Meu Perfil...\n")
-
+                perfil(id_usuario)
             case "0":
                 print("\nEncerrando... Até mais!")
                 break
@@ -405,7 +418,7 @@ def gerar_missoes(missoes):
 
     missoes_escolhidas = random.sample(missoes, min(2, len(missoes)))
 
-    with open('missoesgenericas.txt', 'r') as m:
+    with open('missoesgenericas.txt', 'r',encoding='utf-8') as m:
         missoes_genericas = [linha.strip() for linha in m.readlines()]
 
     missoes_escolhidas += random.sample(missoes_genericas, 1)
@@ -414,7 +427,29 @@ def gerar_missoes(missoes):
 
 contador = 0
 
-def mostrar_missoes(missoes_escolhidas, contador, id_usuario,trofeus_usuario):
+def mostrar_missoes(missoes_escolhidas, contador, id_usuario, trofeus_usuario, todas_missoes):
+    if len(missoes_escolhidas) == 0:
+        print("\nVocê não possui mais missões ativas.")
+
+        escolha = input("Deseja gerar novas missões? (s/n): ").lower()
+
+        if escolha == "s":
+            missoes_escolhidas = gerar_missoes(todas_missoes)
+            contador = 0
+
+            print("\nNovas missões geradas!")
+
+            print("\n" + "=" * 40)
+            print("        NOVAS MISSÕES")
+            print("=" * 40)
+
+            for i, m in enumerate(missoes_escolhidas, 1):
+                print(f"{i} - {m}")
+
+            print("=" * 40)
+
+        else:
+            return contador, trofeus_usuario, missoes_escolhidas
 
     print("\n" + "=" * 40)
     print("        MISSÕES ATIVAS")
@@ -429,28 +464,47 @@ def mostrar_missoes(missoes_escolhidas, contador, id_usuario,trofeus_usuario):
         escolha = int(input('Digite o número da missão que você realizou (0 para nenhuma): '))
     except ValueError:
         print("Entrada inválida!")
-        return contador
+        return contador, trofeus_usuario, missoes_escolhidas
 
     if escolha == 0:
-        return contador
+        return contador, trofeus_usuario, missoes_escolhidas
 
     if 1 <= escolha <= len(missoes_escolhidas):
         removida = missoes_escolhidas.pop(escolha - 1)
 
-        # 👇 extrai troféus
         trofeus_ganhos = int(removida.split("|")[1].split()[0])
 
         print(f"Missão concluída: {removida}")
         print(f"Você ganhou {trofeus_ganhos} troféus!")
 
-        # 👇 atualiza arquivo
         atualizar_trofeus_arquivo(id_usuario, trofeus_ganhos)
+        trofeus_usuario = pegar_trofeus(id_usuario)
 
         contador += 1
+
     else:
         print("Número inválido!")
 
-    return contador
+
+    if contador >= 3:
+        print("\nVocê concluiu 3 missões!")
+        escolha = input("Deseja gerar mais 3 missões? (s/n): ").lower()
+
+        if escolha == "s":
+            contador = 0  # reinicia contador
+            missoes_escolhidas = gerar_missoes(todas_missoes)
+            print("\nNovas missões geradas!")
+
+            print("\n" + "=" * 40)
+            print("        NOVAS MISSÕES")
+            print("=" * 40)
+
+            for i, m in enumerate(missoes_escolhidas, 1):
+                print(f"{i} - {m}")
+
+            print("=" * 40)
+
+    return contador, trofeus_usuario, missoes_escolhidas
 
 def atualizar_streak_arquivo(id_usuario, contador):
     if contador < 3:
@@ -654,6 +708,7 @@ def beneficios_menu(trofeus_usuario):
 
         try:
             escolha = int(input("Escolha um benefício para resgatar: "))
+
         except ValueError:
             print("Entrada inválida!")
             continue
@@ -669,6 +724,8 @@ def beneficios_menu(trofeus_usuario):
 
             if trofeus_usuario >= custo:
                 trofeus_usuario -= custo
+
+                remover_trofeus_arquivo(id_usuario, custo)
                 removido = beneficios.pop(escolha - 1)
 
                 print("\nBenefício resgatado com sucesso!")
@@ -693,10 +750,56 @@ def pegar_trofeus(id_usuario):
                 return int(trofeus)
 
     return 0
+def perfil(id_usuario):
+    '''Essa função tem como objetivo mostrar os dados do perfil'''
+    with open("users.txt", "r", encoding="utf-8") as f:
+        for linha in f:
+            if linha.strip() == "":
+                continue
+
+            id_, nome, senha, streak, trofeus, respostas = linha.strip().split(";")
+
+            if int(id_) == id_usuario:
+                print("\n" + "=" * 40)
+                print("          MEU PERFIL")
+                print("=" * 40)
+                print(f"Nome: {nome}")
+                print(f"Carteirinha: {id_}")
+                print(f"Senha: {senha}")
+                print(f"Streak: {streak} dias")
+                print(f"Troféus: {trofeus}")
+                print("=" * 40)
+
+                return int(trofeus)
+
+def remover_trofeus_arquivo(id_usuario, trofeus_gastos):
+    linhas = []
+
+    with open("users.txt", "r", encoding="utf-8") as f:
+        for linha in f:
+            if linha.strip() == "":
+                continue
+
+            id_, nome, senha, streak, trofeus, respostas = linha.strip().split(";")
+
+            if int(id_) == id_usuario:
+                novo_total = int(trofeus) - trofeus_gastos
+                trofeus = str(novo_total)
+
+            nova_linha = ";".join([id_, nome, senha, streak, trofeus, respostas])
+            linhas.append(nova_linha)
+
+    with open("users.txt", "w", encoding="utf-8") as f:
+        for l in linhas:
+            f.write(l + "\n")
+
+
 boas_vindas()
 aceitar_lgpd()
 pedir_login()
+trofeus_usuario = pegar_trofeus(id_usuario)
 missoes = definir_missoes(id_usuario)
 missoes_escolhidas = gerar_missoes(missoes)
-menu(missoes_escolhidas,contador,id_usuario)
+menu(missoes_escolhidas,contador,id_usuario,trofeus_usuario)
+
 

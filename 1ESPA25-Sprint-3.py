@@ -437,17 +437,6 @@ def mostrar_missoes(missoes_escolhidas, contador, id_usuario, trofeus_usuario, t
             missoes_escolhidas = gerar_missoes(todas_missoes)
             contador = 0
 
-            print("\nNovas missões geradas!")
-
-            print("\n" + "=" * 40)
-            print("        NOVAS MISSÕES")
-            print("=" * 40)
-
-            for i, m in enumerate(missoes_escolhidas, 1):
-                print(f"{i} - {m}")
-
-            print("=" * 40)
-
         else:
             return contador, trofeus_usuario, missoes_escolhidas
 
@@ -484,25 +473,6 @@ def mostrar_missoes(missoes_escolhidas, contador, id_usuario, trofeus_usuario, t
 
     else:
         print("Número inválido!")
-
-
-    if contador >= 3:
-        print("\nVocê concluiu 3 missões!")
-        escolha = input("Deseja gerar mais 3 missões? (s/n): ").lower()
-
-        if escolha == "s":
-            contador = 0  # reinicia contador
-            missoes_escolhidas = gerar_missoes(todas_missoes)
-            print("\nNovas missões geradas!")
-
-            print("\n" + "=" * 40)
-            print("        NOVAS MISSÕES")
-            print("=" * 40)
-
-            for i, m in enumerate(missoes_escolhidas, 1):
-                print(f"{i} - {m}")
-
-            print("=" * 40)
 
     return contador, trofeus_usuario, missoes_escolhidas
 
